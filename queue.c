@@ -40,7 +40,7 @@ void q_free(struct list_head *head)
 bool q_insert_head(struct list_head *head, char *s)
 {
     element_t *new_element = malloc(sizeof(element_t));
-    if (new_element == NULL || head == NULL)
+    if (new_element == NULL || head == NULL || s == NULL)
         return 0;
     list_add(&new_element->list, head);
 
@@ -56,7 +56,7 @@ bool q_insert_head(struct list_head *head, char *s)
 bool q_insert_tail(struct list_head *head, char *s)
 {
     element_t *new_element = malloc(sizeof(element_t));
-    if (new_element == NULL || head == NULL)
+    if (new_element == NULL || head == NULL || s == NULL)
         return 0;
     list_add_tail(&new_element->list, head);
 
