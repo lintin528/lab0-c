@@ -126,13 +126,12 @@ bool q_delete_mid(struct list_head *head)
 {
     if (head == NULL || head->next == head)
         return false;
-    int size = q_size(head);
-    int count = 0;
+
     struct list_head *mid = head->next;
-    size /= 2;
-    while (count <= size - 1) {
+    struct list_head *fast = head->next->next;
+    while (fast != head && fast->next != head) {
         mid = mid->next;
-        count++;
+        fast = fast->next->next;
     }
     element_t *mid_element = list_entry(mid, element_t, list);
     list_del(mid);
