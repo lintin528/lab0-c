@@ -79,7 +79,7 @@ bool q_insert_tail(struct list_head *head, char *s)
 /* Remove an element from head of queue */
 element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 {
-    if (head == NULL)
+    if (head == NULL || head->next == head)
         return NULL;
     element_t *removed = list_first_entry(head, element_t, list);
 
@@ -95,7 +95,7 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 /* Remove an element from tail of queue */
 element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
 {
-    if (head == NULL)
+    if (head == NULL || head->next == head)
         return NULL;
     element_t *removed = list_last_entry(head, element_t, list);
 
@@ -124,6 +124,8 @@ int q_size(struct list_head *head)
 /* Delete the middle node in queue */
 bool q_delete_mid(struct list_head *head)
 {
+    if (head == NULL || head->next == head)
+        return false;
     int size = q_size(head);
     int count = 0;
     struct list_head *mid = head->next;
