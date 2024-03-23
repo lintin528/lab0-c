@@ -41,11 +41,22 @@ OBJS := qtest.o report.o console.o harness.o queue.o \
         random.o dudect/constant.o dudect/fixture.o dudect/ttest.o \
         shannon_entropy.o \
         linenoise.o web.o \
-		list_sort.o
+		list_sort.o timsort.o \
+
+OBJS_WITHOUT_QTEST := $(filter-out qtest.o,$(OBJS))
 
 deps := $(OBJS:%.o=.%.o.d)
 
 qtest: $(OBJS)
+	$(VECHO) "  LD\t$@\n"
+	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
+
+
+sort_test: sort_test.o $(OBJS_WITHOUT_QTEST)
+	$(VECHO) "  LD\t$@\n"
+	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
+
+qsort_test: qsort_test.o $(OBJS_WITHOUT_QTEST)
 	$(VECHO) "  LD\t$@\n"
 	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
 
