@@ -21,14 +21,17 @@ void q_create_runs(struct list_head *head)
         return;
     struct list_head *first;
     struct list_head *safe;
+    bool flag = false;
     list_for_each_safe (first, safe, head) {
         int count = 0;
         while (count < rand() % 3 + 3 - 1 && safe != head) {
             safe = safe->next;
-            list_move(safe->prev, first->prev);
+            if (flag)
+                list_move(safe->prev, first->prev);
             first = first->prev;
             count++;
         }
+        flag = !flag;
     }
 }
 
@@ -150,7 +153,7 @@ int main(void)
     srand((uintptr_t) &main);
 
     test_t tests[] = {{.name = "tim_sort", .impl = timsort},
-                      {.name = "list_sort", .impl = list_sort},
+                      //{.name = "list_sort", .impl = list_sort},
                       {NULL, NULL}};
     test_t *test = tests;
 
@@ -180,6 +183,14 @@ int main(void)
                check_list(&testdata_head, nums) ? "sorted" : "not sorted");
         test++;
     }
+
+    /* check if dataset is sorted correctly */
+    // struct list_head *node, *safe;
+    // element_t *node_e;
+    // list_for_each_safe (node, safe, &sample_head) {
+    //     node_e = list_entry(node, element_t, list);
+    //     printf(" %d ", node_e->val);
+    // }
 
     return 0;
 }

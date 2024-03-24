@@ -14,14 +14,17 @@ void q_create_runs(struct list_head *head)
         return;
     struct list_head *first;
     struct list_head *safe;
+    bool flag = false;
     list_for_each_safe (first, safe, head) {
         int count = 0;
         while (count < rand() % 3 + 3 - 1 && safe != head) {
             safe = safe->next;
-            list_move(safe->prev, first->prev);
+            if (flag)
+                list_move(safe->prev, first->prev);
             first = first->prev;
             count++;
         }
+        flag = !flag;
     }
 }
 
