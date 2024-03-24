@@ -64,27 +64,27 @@ static void create_sample(struct list_head *head, element_t *space, int samples)
     printf("Creating sample\n");
     for (int i = 0; i < samples; i++) {
         element_t *elem = space + i;
-        // elem->val = rand();
-        elem->val = i;
+        elem->val = rand();
+        // elem->val = i;
         list_add_tail(&elem->list, head);
     }
 }
 
-static void copy_list(struct list_head *from,
-                      struct list_head *to,
-                      element_t *space)
-{
-    if (list_empty(from))
-        return;
+// static void copy_list(struct list_head *from,
+//                       struct list_head *to,
+//                       element_t *space)
+// {
+//     if (list_empty(from))
+//         return;
 
-    element_t *entry;
-    list_for_each_entry (entry, from, list) {
-        element_t *copy = space++;
-        copy->val = entry->val;
-        copy->seq = entry->seq;
-        list_add_tail(&copy->list, to);
-    }
-}
+//     element_t *entry;
+//     list_for_each_entry (entry, from, list) {
+//         element_t *copy = space++;
+//         copy->val = entry->val;
+//         copy->seq = entry->seq;
+//         list_add_tail(&copy->list, to);
+//     }
+// }
 
 int compare(void *priv, const struct list_head *a, const struct list_head *b)
 {
@@ -145,7 +145,10 @@ typedef struct {
 
 int main(void)
 {
-    struct list_head sample_head, warmdata_head, testdata_head;
+    struct list_head sample_head;
+    // struct list_head warmdata_head;
+    // struct list_head testdata_head;
+
     int count;
     int nums = SAMPLES;
 
@@ -153,15 +156,15 @@ int main(void)
     srand((uintptr_t) &main);
 
     test_t tests[] = {{.name = "tim_sort", .impl = timsort},
-                      //{.name = "list_sort", .impl = list_sort},
+                      //   {.name = "list_sort", .impl = list_sort},
                       {NULL, NULL}};
     test_t *test = tests;
 
     INIT_LIST_HEAD(&sample_head);
 
     element_t *samples = malloc(sizeof(*samples) * SAMPLES);
-    element_t *warmdata = malloc(sizeof(*warmdata) * SAMPLES);
-    element_t *testdata = malloc(sizeof(*testdata) * SAMPLES);
+    // element_t *warmdata = malloc(sizeof(*warmdata) * SAMPLES);
+    // element_t *testdata = malloc(sizeof(*testdata) * SAMPLES);
 
     create_sample(&sample_head, samples, nums);
     q_create_runs(&sample_head);
@@ -169,18 +172,18 @@ int main(void)
     while (test->impl) {
         printf("==== Testing %s ====\n", test->name);
         /* Warm up */
-        INIT_LIST_HEAD(&warmdata_head);
-        INIT_LIST_HEAD(&testdata_head);
-        copy_list(&sample_head, &testdata_head, testdata);
-        copy_list(&sample_head, &warmdata_head, warmdata);
-        test->impl(&count, &warmdata_head, compare);
+        // INIT_LIST_HEAD(&warmdata_head);
+        // INIT_LIST_HEAD(&testdata_head);
+        // copy_list(&sample_head, &testdata_head, testdata);
+        // copy_list(&sample_head, &warmdata_head, warmdata);
+        // test->impl(&count, &sample_head, compare);
 
         /* Test */
         count = 0;
-        test->impl(&count, &testdata_head, compare);
+        test->impl(&count, &sample_head, compare);
         printf("  Comparisons:    %d\n", count);
         printf("  List is %s\n",
-               check_list(&testdata_head, nums) ? "sorted" : "not sorted");
+               check_list(&sample_head, nums) ? "sorted" : "not sorted");
         test++;
     }
 

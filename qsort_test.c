@@ -8,25 +8,25 @@
 
 #define SAMPLES 1000
 
-void q_create_runs(struct list_head *head)
-{
-    if (head == NULL || head->next == head)
-        return;
-    struct list_head *first;
-    struct list_head *safe;
-    bool flag = false;
-    list_for_each_safe (first, safe, head) {
-        int count = 0;
-        while (count < rand() % 3 + 3 - 1 && safe != head) {
-            safe = safe->next;
-            if (flag)
-                list_move(safe->prev, first->prev);
-            first = first->prev;
-            count++;
-        }
-        flag = !flag;
-    }
-}
+// void q_create_runs(struct list_head *head)
+// {
+//     if (head == NULL || head->next == head)
+//         return;
+//     struct list_head *first;
+//     struct list_head *safe;
+//     bool flag = false;
+//     list_for_each_safe (first, safe, head) {
+//         int count = 0;
+//         while (count < rand() % 3 + 3 - 1 && safe != head) {
+//             safe = safe->next;
+//             if (flag)
+//                 list_move(safe->prev, first->prev);
+//             first = first->prev;
+//             count++;
+//         }
+//         flag = !flag;
+//     }
+// }
 
 // static void shaffle_partially(struct list_head *head)
 // {
@@ -57,7 +57,8 @@ static void create_sample(struct list_head *head, element_t *space, int samples)
     printf("Creating sample\n");
     for (int i = 0; i < samples; i++) {
         element_t *elem = space + i;
-        char v = (char) i;
+        char v = (char) rand();
+        // char v = (char) i;
         elem->value = &v;
         list_add_tail(&elem->list, head);
     }
@@ -76,7 +77,7 @@ int main(void)
     element_t *samples = malloc(sizeof(*samples) * SAMPLES);
 
     create_sample(&sample_head, samples, nums);
-    q_create_runs(&sample_head);
+    // q_create_runs(&sample_head);
 
     q_sort(&sample_head, false);
 
