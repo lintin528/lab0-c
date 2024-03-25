@@ -42,6 +42,7 @@ OBJS := qtest.o report.o console.o harness.o queue.o \
         shannon_entropy.o \
         linenoise.o web.o \
 		list_sort.o timsort.o \
+		log2fix.o \
 
 OBJS_WITHOUT_QTEST := $(filter-out qtest.o,$(OBJS))
 
@@ -57,6 +58,10 @@ sort_test: sort_test.o $(OBJS_WITHOUT_QTEST)
 	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
 
 qsort_test: qsort_test.o $(OBJS_WITHOUT_QTEST)
+	$(VECHO) "  LD\t$@\n"
+	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
+
+log2_test: log2_test.o $(OBJS_WITHOUT_QTEST)
 	$(VECHO) "  LD\t$@\n"
 	$(Q)$(CC) $(LDFLAGS) -o $@ $^ -lm
 
@@ -90,6 +95,7 @@ clean:
 	rm -f $(OBJS) $(deps) *~ qtest /tmp/qtest.*
 	rm -rf .$(DUT_DIR)
 	rm -rf *.dSYM
+	rm -rf *.csv
 	(cd traces; rm -f *~)
 
 distclean: clean

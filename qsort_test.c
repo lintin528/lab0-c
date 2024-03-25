@@ -57,7 +57,7 @@ static void create_sample(struct list_head *head, element_t *space, int samples)
     printf("Creating sample\n");
     for (int i = 0; i < samples; i++) {
         element_t *elem = space + i;
-        char v = (char) rand();
+        char v = (char) (rand() % 26 + 'a');
         // char v = (char) i;
         elem->value = &v;
         list_add_tail(&elem->list, head);
@@ -80,6 +80,13 @@ int main(void)
     // q_create_runs(&sample_head);
 
     q_sort(&sample_head, false);
+
+    struct list_head *node, *safe;
+    list_for_each_safe (node, safe, &sample_head) {
+        element_t *node_e;
+        node_e = list_entry(node, element_t, list);
+        printf(" %c ", *node_e->value);
+    }
 
     return 0;
 }

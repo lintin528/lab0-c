@@ -13,27 +13,27 @@ typedef struct {
     int seq;
 } element_t;
 
-#define SAMPLES 1000
+#define SAMPLES 10000
 
-void q_create_runs(struct list_head *head)
-{
-    if (head == NULL || head->next == head)
-        return;
-    struct list_head *first;
-    struct list_head *safe;
-    bool flag = false;
-    list_for_each_safe (first, safe, head) {
-        int count = 0;
-        while (count < rand() % 3 + 3 - 1 && safe != head) {
-            safe = safe->next;
-            if (flag)
-                list_move(safe->prev, first->prev);
-            first = first->prev;
-            count++;
-        }
-        flag = !flag;
-    }
-}
+// void q_create_runs(struct list_head *head)
+// {
+//     if (head == NULL || head->next == head)
+//         return;
+//     struct list_head *first;
+//     struct list_head *safe;
+//     bool flag = false;
+//     list_for_each_safe (first, safe, head) {
+//         int count = 0;
+//         while (count < rand() % 3 + 3 - 1 && safe != head) {
+//             safe = safe->next;
+//             if (flag)
+//                 list_move(safe->prev, first->prev);
+//             first = first->prev;
+//             count++;
+//         }
+//         flag = !flag;
+//     }
+// }
 
 // static void shaffle_partially(struct list_head *head)
 // {
@@ -64,8 +64,8 @@ static void create_sample(struct list_head *head, element_t *space, int samples)
     printf("Creating sample\n");
     for (int i = 0; i < samples; i++) {
         element_t *elem = space + i;
-        elem->val = rand();
-        // elem->val = i;
+        // elem->val = rand();
+        elem->val = i;
         list_add_tail(&elem->list, head);
     }
 }
@@ -156,7 +156,7 @@ int main(void)
     srand((uintptr_t) &main);
 
     test_t tests[] = {{.name = "tim_sort", .impl = timsort},
-                      //   {.name = "list_sort", .impl = list_sort},
+                      // {.name = "list_sort", .impl = list_sort},
                       {NULL, NULL}};
     test_t *test = tests;
 
@@ -167,7 +167,7 @@ int main(void)
     // element_t *testdata = malloc(sizeof(*testdata) * SAMPLES);
 
     create_sample(&sample_head, samples, nums);
-    q_create_runs(&sample_head);
+    // q_create_runs(&sample_head);
 
     while (test->impl) {
         printf("==== Testing %s ====\n", test->name);
